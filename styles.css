@@ -217,7 +217,7 @@ a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-under
 .row-item p:last-child { margin-bottom: 0; }
 
 /* Pricing */
-.price-card { border-top: 3px solid var(--gold); padding-top: 2rem; }
+.price-card { border-top: 3px solid var(--gold); padding-top: 2rem; scroll-margin-top: 110px; }
 .price-card .price {
   font-family: 'Fraunces', Georgia, serif;
   font-weight: 300;
