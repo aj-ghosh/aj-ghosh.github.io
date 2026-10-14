@@ -310,6 +310,11 @@ a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-under
 .image-band .eyebrow { color: #fff; }
 .image-band .eyebrow::after { margin-left: auto; margin-right: auto; }
 
+/* ---------- Image + text split ---------- */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.split img { width: 100%; height: auto; display: block; border-radius: 0; }
+.split .section-head { margin-bottom: 0; }
+
 /* ---------- Footer: white, hairline rule ---------- */
 .site-footer {
   background: var(--paper);
@@ -342,6 +347,7 @@ a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-under
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
   .grid-3 { grid-template-columns: 1fr; gap: 2.5rem; }
+  .split { grid-template-columns: 1fr; gap: 2.5rem; }
   .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .about-grid img { max-width: 340px; }
   .footer-grid { grid-template-columns: 1fr; }
