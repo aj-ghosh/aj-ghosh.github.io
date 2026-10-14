@@ -141,6 +141,8 @@ a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-under
 .btn-outline:hover { background: var(--pine); border-color: var(--pine); color: #fff; }
 .btn-light { background: #fff; color: var(--pine); border-color: #fff; }
 .btn-light:hover { background: var(--gold-light); border-color: var(--gold-light); color: var(--pine); }
+/* Keep button text readable inside pine bands (band link color would otherwise win) */
+.band-pine a.btn-light, .band-pine a.btn-light:hover { color: var(--pine); }
 .cta-row { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 2.5rem; }
 
 /* ---------- Hero: full-bleed pine band with abstract visual ---------- */
