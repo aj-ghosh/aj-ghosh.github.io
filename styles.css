@@ -141,10 +141,12 @@ a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-under
 .btn-light:hover { background: var(--cyan); border-color: var(--cyan); color: #fff; }
 .cta-row { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 2.5rem; }
 
-/* ---------- Hero: full-bleed navy band ---------- */
+/* ---------- Hero: full-bleed navy band with abstract visual ---------- */
 .hero {
-  background: var(--navy);
-  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 160%);
+  background:
+    linear-gradient(135deg, rgba(5,28,44,0.88) 0%, rgba(3,51,156,0.55) 160%),
+    url('assets/hero-abstract-navy.jpg') center / cover no-repeat,
+    var(--navy);
   color: #fff;
   padding: 6rem 0 5rem;
 }
@@ -292,6 +294,20 @@ a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-under
 }
 .field textarea { min-height: 160px; resize: vertical; }
 .form-note { font-size: 0.95rem; color: var(--gray); margin-top: 1.5rem; }
+
+/* ---------- Full-bleed image band (McKinsey-style) ---------- */
+.image-band {
+  background:
+    linear-gradient(rgba(5,28,44,0.72), rgba(5,28,44,0.72)),
+    url('assets/office-tower-dusk.jpg') center / cover no-repeat,
+    var(--navy);
+  color: #fff;
+  padding: 7rem 0;
+  text-align: center;
+}
+.image-band h2 { color: #fff; max-width: 22em; margin-left: auto; margin-right: auto; }
+.image-band .eyebrow { color: #fff; }
+.image-band .eyebrow::after { margin-left: auto; margin-right: auto; }
 
 /* ---------- Footer: white, hairline rule ---------- */
 .site-footer {
