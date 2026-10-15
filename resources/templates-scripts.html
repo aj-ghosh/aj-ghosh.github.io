@@ -42,8 +42,8 @@
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">The collection</p>
-        <h2 id="library-heading">Enter your email to download</h2>
-        <p class="lead">One signup unlocks the full library — every category, every tool.</p>
+        <h2 id="library-heading">Just before you dive in&hellip;</h2>
+        <p class="lead">Drop your name and email to access the library. I&rsquo;ll let you know when new tools are added. No spam, ever.</p>
       </div>
       <div id="gate">
         <form id="gate-form" action="https://formspree.io/f/xoejpjwn" method="POST">
@@ -60,7 +60,7 @@
           <p class="fine">No spam — your email is only used for these resources.</p>
         </form>
       </div>
-      <div class="grid-3" id="library-grid" hidden>
+      <div class="grid-3" id="library-grid">
         <div class="card card-rule">
           <h3>Onboarding Health Score</h3>
           <p>Interactive self-assessment: score your client onboarding across 8 structural elements and get a green, yellow, or red tag.</p>
@@ -69,19 +69,20 @@
         <div class="card card-rule">
           <h3>Client Onboarding Email Templates</h3>
           <p>Four copy-and-adapt emails: welcome, documents request, first-review invite, and 30-day check-in.</p>
-          <div class="cta-row"><a class="btn" href="../assets/resources/onboarding-email-templates.pdf" download>Download PDF</a></div>
+          <div class="cta-row"><a class="btn gated-download" href="../assets/resources/onboarding-email-templates.pdf" download>Download PDF</a></div>
         </div>
         <div class="card card-rule">
           <h3>Prospect Follow-Up Email Scripts</h3>
           <p>Five copy-and-adapt scripts covering the full arc from first contact to break-up to nurture.</p>
-          <div class="cta-row"><a class="btn" href="../assets/resources/prospect-follow-up-email-scripts.pdf" download>Download PDF</a></div>
+          <div class="cta-row"><a class="btn gated-download" href="../assets/resources/prospect-follow-up-email-scripts.pdf" download>Download PDF</a></div>
         </div>
         <div class="card card-rule">
           <h3>Client Review Meeting Agenda Template</h3>
           <p>A 45-minute agenda structure plus pre- and post-meeting checklists that make reviews consistent.</p>
-          <div class="cta-row"><a class="btn" href="../assets/resources/client-review-meeting-agenda.pdf" download>Download PDF</a></div>
+          <div class="cta-row"><a class="btn gated-download" href="../assets/resources/client-review-meeting-agenda.pdf" download>Download PDF</a></div>
         </div>
       </div>
+      <p class="fine" style="margin-top:1.5rem">Free to use in your practice — not for resale or redistribution.</p>
       <div class="cta-row" style="margin-top:2.5rem"><a class="btn btn-outline" href="../resources.html">&larr; All resource categories</a></div>
     </div>
   </section>
@@ -137,10 +138,23 @@
 
 <script>
 (function () {
-  var grid = document.getElementById('library-grid');
   var gate = document.getElementById('gate');
-  function unlock() { gate.style.display = 'none'; grid.hidden = false; }
-  try { if (localStorage.getItem('ajg_library') === '1') { unlock(); } } catch (e) {}
+  function isUnlocked() {
+    try { return localStorage.getItem('ajg_library') === '1'; } catch (e) { return false; }
+  }
+  function refreshGate() { gate.style.display = isUnlocked() ? 'none' : ''; }
+  refreshGate();
+  document.querySelectorAll('a.gated-download').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      if (!isUnlocked()) {
+        e.preventDefault();
+        refreshGate();
+        gate.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var name = document.getElementById('gate-name');
+        if (name) { name.focus({ preventScroll: true }); }
+      }
+    });
+  });
   document.getElementById('gate-form').addEventListener('submit', function (e) {
     e.preventDefault();
     var form = this;
@@ -157,7 +171,7 @@
     }).then(function (res) {
       if (res.ok) {
         try { localStorage.setItem('ajg_library', '1'); } catch (e) {}
-        unlock();
+        refreshGate();
       } else { throw new Error('send failed'); }
     }).catch(function () {
       btn.disabled = false;

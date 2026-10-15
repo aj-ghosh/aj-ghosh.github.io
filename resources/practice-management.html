@@ -42,8 +42,8 @@
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">The collection</p>
-        <h2 id="library-heading">Enter your email to download</h2>
-        <p class="lead">One signup unlocks the full library — every category, every tool.</p>
+        <h2 id="library-heading">Just before you dive in&hellip;</h2>
+        <p class="lead">Drop your name and email to access the library. I&rsquo;ll let you know when new tools are added. No spam, ever.</p>
       </div>
       <div id="gate">
         <form id="gate-form" action="https://formspree.io/f/xoejpjwn" method="POST">
@@ -60,38 +60,39 @@
           <p class="fine">No spam — your email is only used for these resources.</p>
         </form>
       </div>
-      <div class="grid-3" id="library-grid" hidden>
+      <div class="grid-3" id="library-grid">
         <div class="card card-rule">
           <h3>Practice Operations Health Scorecard</h3>
           <p>Twelve yes/no questions that show you, in five minutes, where your practice is leaking.</p>
-          <div class="cta-row"><a class="btn" href="../assets/resources/operations-health-scorecard.pdf" download>Download PDF</a></div>
+          <div class="cta-row"><a class="btn gated-download" href="../assets/resources/operations-health-scorecard.pdf" download>Download PDF</a></div>
         </div>
         <div class="card card-rule">
           <h3>Weekly Operations Review Checklist</h3>
           <p>A 30-minute Monday agenda that keeps follow-up, onboarding, and service from drifting.</p>
-          <div class="cta-row"><a class="btn" href="../assets/resources/weekly-operations-review-checklist.pdf" download>Download PDF</a></div>
+          <div class="cta-row"><a class="btn gated-download" href="../assets/resources/weekly-operations-review-checklist.pdf" download>Download PDF</a></div>
         </div>
         <div class="card card-rule">
           <h3>CRM Data Hygiene Guide</h3>
           <p>A daily, weekly, monthly, and quarterly rhythm that keeps your client data trustworthy.</p>
-          <div class="cta-row"><a class="btn" href="../assets/resources/crm-data-hygiene-guide.pdf" download>Download PDF</a></div>
+          <div class="cta-row"><a class="btn gated-download" href="../assets/resources/crm-data-hygiene-guide.pdf" download>Download PDF</a></div>
         </div>
         <div class="card card-rule">
           <h3>Team Roles & Responsibilities Template</h3>
           <p>A fill-in table that ends "I thought you were handling that" forever.</p>
-          <div class="cta-row"><a class="btn" href="../assets/resources/team-roles-responsibilities-template.pdf" download>Download PDF</a></div>
+          <div class="cta-row"><a class="btn gated-download" href="../assets/resources/team-roles-responsibilities-template.pdf" download>Download PDF</a></div>
         </div>
         <div class="card card-rule">
           <h3>CRM Selection Guide</h3>
           <p>Fifteen questions to ask before you sign with a CRM vendor — fit, integrations, data, and contract terms.</p>
-          <div class="cta-row"><a class="btn" href="../assets/resources/crm-selection-guide.pdf" download>Download PDF</a></div>
+          <div class="cta-row"><a class="btn gated-download" href="../assets/resources/crm-selection-guide.pdf" download>Download PDF</a></div>
         </div>
         <div class="card card-rule">
           <h3>Tech Stack Self-Assessment</h3>
           <p>Ten yes/no questions that reveal whether your tools are helping or quietly working against you.</p>
-          <div class="cta-row"><a class="btn" href="../assets/resources/tech-stack-self-assessment.pdf" download>Download PDF</a></div>
+          <div class="cta-row"><a class="btn gated-download" href="../assets/resources/tech-stack-self-assessment.pdf" download>Download PDF</a></div>
         </div>
       </div>
+      <p class="fine" style="margin-top:1.5rem">Free to use in your practice — not for resale or redistribution.</p>
       <div class="cta-row" style="margin-top:2.5rem"><a class="btn btn-outline" href="../resources.html">&larr; All resource categories</a></div>
     </div>
   </section>
@@ -147,10 +148,23 @@
 
 <script>
 (function () {
-  var grid = document.getElementById('library-grid');
   var gate = document.getElementById('gate');
-  function unlock() { gate.style.display = 'none'; grid.hidden = false; }
-  try { if (localStorage.getItem('ajg_library') === '1') { unlock(); } } catch (e) {}
+  function isUnlocked() {
+    try { return localStorage.getItem('ajg_library') === '1'; } catch (e) { return false; }
+  }
+  function refreshGate() { gate.style.display = isUnlocked() ? 'none' : ''; }
+  refreshGate();
+  document.querySelectorAll('a.gated-download').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      if (!isUnlocked()) {
+        e.preventDefault();
+        refreshGate();
+        gate.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var name = document.getElementById('gate-name');
+        if (name) { name.focus({ preventScroll: true }); }
+      }
+    });
+  });
   document.getElementById('gate-form').addEventListener('submit', function (e) {
     e.preventDefault();
     var form = this;
@@ -167,7 +181,7 @@
     }).then(function (res) {
       if (res.ok) {
         try { localStorage.setItem('ajg_library', '1'); } catch (e) {}
-        unlock();
+        refreshGate();
       } else { throw new Error('send failed'); }
     }).catch(function () {
       btn.disabled = false;
