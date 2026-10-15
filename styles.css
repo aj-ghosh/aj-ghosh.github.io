@@ -320,6 +320,9 @@ a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-under
 .about-grid img { width: 100%; height: auto; display: block; border-radius: 0; }
 
 /* ---------- Contact form ---------- */
+/* ---------- Resource library gate ---------- */
+#gate { max-width: 560px; }
+#gate .fine { font-size: 0.85rem; color: var(--gray); }
 .form-card { max-width: 680px; }
 .field { margin-bottom: 1.75rem; }
 .field label {
