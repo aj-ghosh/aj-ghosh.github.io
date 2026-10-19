@@ -50,7 +50,7 @@ button.score:hover{background:#333}
 footer.site{border-top:1px solid #e8e6e1;padding:40px 0;margin-top:0}
 footer.site .wrap{max-width:1100px}
 footer.site p{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8a8580;margin-bottom:8px}
-@media(max-width:700px){nav.main{display:none}.hamburger{display:block}.hero h1{font-size:28px}}
+@media(max-width:700px){nav.main{display:none}.hamburger{display:block}.hero h1{font-size:28px}header.site .wrap{position:relative}nav.main.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:#fff;border-bottom:1px solid #e8e6e1;padding:8px 24px 18px;gap:0;z-index:60}nav.main.open a{padding:10px 0;font-size:16px}}
 </style>
 </head>
 <body>
@@ -61,7 +61,7 @@ footer.site p{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8a858
       <a href="../services.html">Services</a><a href="../how-it-works.html">How It Works</a><a href="../resources.html">Resources</a>
       <a href="../blog.html">Blog</a><a href="../about.html">About</a><a href="../contact.html">Contact</a>
     </nav>
-    <button class="hamburger" onclick="document.querySelector('nav.main').style.display=document.querySelector('nav.main').style.display==='flex'?'none':'flex'">☰</button>
+    <button class="hamburger" aria-label="Toggle navigation" onclick="this.previousElementSibling.classList.toggle('open')">☰</button>
   </div>
 </header>
 
