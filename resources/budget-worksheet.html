@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="max-image-preview:none">
+<title>Monthly Budget Worksheet — Free Interactive Tool | AJ Ghosh Consulting</title>
+<meta name="description" content="A free interactive monthly budget worksheet built on the 50/30/20 guideline: enter income and expenses, see needs, wants, and savings totals update live. Runs entirely in your browser — nothing is uploaded or stored.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Fraunces:opsz,wght@9..144,300;9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css?v=12">
+<style>
+  .bw { max-width: 860px; }
+  .bw-card { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 28px; margin-bottom: 22px; }
+  .bw-card h2 { font-size: 1.5rem; margin-bottom: 0.35rem; }
+  .bw-card .bw-sub { color: var(--gray); font-size: 0.95rem; margin-bottom: 1.25rem; }
+  .bw-group-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .bw-group-total { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; color: var(--pine); white-space: nowrap; }
+  .bw-row { display: grid; grid-template-columns: 1fr 150px 36px; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .bw-row input[type="text"], .bw-row input[type="number"] {
+    font: inherit; font-weight: 300; color: var(--ink); background: #fff;
+    border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; width: 100%;
+  }
+  .bw-row input[type="number"] { text-align: right; }
+  .bw-row input:focus { outline: 2px solid var(--gold-light); outline-offset: 1px; border-color: var(--gold); }
+  .bw-remove { background: none; border: 1px solid var(--line); border-radius: 6px; color: var(--gray);
+    font-size: 16px; line-height: 1; height: 42px; cursor: pointer; }
+  .bw-remove:hover { color: #a33; border-color: #d8a7a7; }
+  .bw-add { background: none; border: none; color: var(--pine-2); font: inherit; font-weight: 500;
+    cursor: pointer; padding: 4px 0; }
+  .bw-add:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .bw-summary { background: var(--paper-alt); border: 1px solid var(--line); border-radius: 10px; padding: 28px; }
+  .bw-sum-row { margin-bottom: 20px; }
+  .bw-sum-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .bw-sum-name { font-weight: 500; color: var(--ink); }
+  .bw-sum-fig { color: var(--gray); font-size: 0.95rem; }
+  .bw-sum-fig strong { color: var(--ink); font-weight: 500; }
+  .bw-bar { position: relative; height: 12px; background: #e9e4d6; border-radius: 6px; margin-top: 8px; }
+  .bw-bar-fill { height: 100%; border-radius: 6px; background: var(--pine-2); width: 0%; transition: width 0.25s ease; }
+  .bw-bar-fill.over { background: #b3541e; }
+  .bw-bar-fill.under { background: var(--gold); }
+  .bw-bar-target { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--ink); }
+  .bw-bar-target::after { content: "target"; position: absolute; top: -1.15rem; left: 50%; transform: translateX(-50%);
+    font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray); }
+  .bw-remaining { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid var(--line);
+    padding-top: 18px; margin-top: 4px; }
+  .bw-remaining .amt { font-family: 'Fraunces', Georgia, serif; font-size: 1.6rem; color: var(--pine); }
+  .bw-remaining .amt.neg { color: #a33; }
+  .bw-actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 26px 0 8px; }
+  .bw-note { font-size: 0.9rem; color: var(--gray); }
+  @media (max-width: 640px) {
+    .bw-row { grid-template-columns: 1fr 110px 36px; }
+    .bw-card, .bw-summary { padding: 20px; }
+  }
+  @media print {
+    .site-header, .bw-actions, .bw-add, .bw-remove, .band-pine, .no-print { display: none !important; }
+    .bw-row input { border: none !important; padding: 2px 4px; }
+    .bw-row { grid-template-columns: 1fr 120px; }
+    body { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html">AJ Ghosh</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+    <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true"><span></span></label>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="../index.html">Home</a>
+      <a href="../services.html">Services</a>
+      <a href="../how-it-works.html">How It Works</a>
+      <a href="../resources.html" aria-current="page">Resources</a>
+      <a href="../blog.html">Blog</a>
+      <a href="../about.html">About</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap">
+      <p class="eyebrow"><a href="../resources.html" style="color:inherit">Free resources</a> &nbsp;/&nbsp; <a href="templates-scripts.html" style="color:inherit">Tools &amp; Templates</a></p>
+      <h1>Monthly Budget Worksheet</h1>
+      <p class="dek">A simple monthly budget, organized the way the 50/30/20 guideline sees it: what you need, what you want, and what you keep. Enter the numbers and the totals adjust as you type. Advisors — this is built to be shared with clients; households — it's built to be finished in one sitting.</p>
+      <p class="bw-note">Private by design: the worksheet runs entirely in your browser. Nothing you type is uploaded, saved, or sent anywhere.</p>
+    </div>
+  </div>
+
+  <section class="band" aria-labelledby="worksheet-heading">
+    <div class="wrap bw">
+      <h2 id="worksheet-heading" class="no-print" style="position:absolute;left:-9999px">Budget worksheet</h2>
+
+      <div class="bw-card" data-group-card="income">
+        <div class="bw-group-head">
+          <div>
+            <h2>Monthly income</h2>
+            <p class="bw-sub">Use take-home (after-tax) amounts — what actually lands in the account.</p>
+          </div>
+          <div class="bw-group-total" id="total-income">$0</div>
+        </div>
+        <div class="bw-rows" id="rows-income"></div>
+        <button class="bw-add" type="button" data-add="income">+ Add an income line</button>
+      </div>
+
+      <div class="bw-card" data-group-card="needs">
+        <div class="bw-group-head">
+          <div>
+            <h2>Needs</h2>
+            <p class="bw-sub">The bills that keep the household running. Guideline: about 50% of take-home pay.</p>
+          </div>
+          <div class="bw-group-total" id="total-needs">$0</div>
+        </div>
+        <div class="bw-rows" id="rows-needs"></div>
+        <button class="bw-add" type="button" data-add="needs">+ Add a line</button>
+      </div>
+
+      <div class="bw-card" data-group-card="wants">
+        <div class="bw-group-head">
+          <div>
+            <h2>Wants</h2>
+            <p class="bw-sub">The spending that makes life enjoyable — and the first place to look when money is tight. Guideline: about 30%.</p>
+          </div>
+          <div class="bw-group-total" id="total-wants">$0</div>
+        </div>
+        <div class="bw-rows" id="rows-wants"></div>
+        <button class="bw-add" type="button" data-add="wants">+ Add a line</button>
+      </div>
+
+      <div class="bw-card" data-group-card="save">
+        <div class="bw-group-head">
+          <div>
+            <h2>Savings &amp; debt payoff</h2>
+            <p class="bw-sub">Money future-you keeps: savings, investing, and debt payments above the minimums. Guideline: about 20%.</p>
+          </div>
+          <div class="bw-group-total" id="total-save">$0</div>
+        </div>
+        <div class="bw-rows" id="rows-save"></div>
+        <button class="bw-add" type="button" data-add="save">+ Add a line</button>
+      </div>
+
+      <div class="bw-summary" aria-live="polite">
+        <h2 style="margin-bottom:1.25rem">How it compares to 50/30/20</h2>
+        <div class="bw-sum-row">
+          <div class="bw-sum-top">
+            <span class="bw-sum-name">Needs</span>
+            <span class="bw-sum-fig"><strong id="fig-needs">$0</strong> · <span id="pct-needs">0%</span> of income (guideline 50% · <span id="tgt-needs">$0</span>)</span>
+          </div>
+          <div class="bw-bar"><div class="bw-bar-fill" id="bar-needs"></div><div class="bw-bar-target" style="left:50%"></div></div>
+        </div>
+        <div class="bw-sum-row">
+          <div class="bw-sum-top">
+            <span class="bw-sum-name">Wants</span>
+            <span class="bw-sum-fig"><strong id="fig-wants">$0</strong> · <span id="pct-wants">0%</span> of income (guideline 30% · <span id="tgt-wants">$0</span>)</span>
+          </div>
+          <div class="bw-bar"><div class="bw-bar-fill" id="bar-wants"></div><div class="bw-bar-target" style="left:30%"></div></div>
+        </div>
+        <div class="bw-sum-row">
+          <div class="bw-sum-top">
+            <span class="bw-sum-name">Savings &amp; debt payoff</span>
+            <span class="bw-sum-fig"><strong id="fig-save">$0</strong> · <span id="pct-save">0%</span> of income (guideline 20% · <span id="tgt-save">$0</span>)</span>
+          </div>
+          <div class="bw-bar"><div class="bw-bar-fill" id="bar-save"></div><div class="bw-bar-target" style="left:20%"></div></div>
+        </div>
+        <div class="bw-remaining">
+          <span class="bw-sum-name">Income left over</span>
+          <span class="amt" id="fig-remaining">$0</span>
+        </div>
+        <p class="bw-note" style="margin-top:14px">The 50/30/20 split is a starting point, not a verdict. In high-cost housing markets, needs alone can run past 50% — the value of the worksheet is seeing your actual split clearly, then moving it a few points at a time.</p>
+      </div>
+
+      <div class="bw-actions">
+        <button class="btn" type="button" id="bw-print">Print / save as PDF</button>
+        <a class="btn btn-outline" href="../assets/resources/budget-worksheet.xlsx" download>Download the spreadsheet version</a>
+        <button class="btn btn-outline" type="button" id="bw-reset">Start over</button>
+      </div>
+      <p class="bw-note">Prefer paper and pencil, or a file you can keep? The spreadsheet version has the same categories with the math built in.</p>
+    </div>
+  </section>
+
+  <section class="band band-alt" aria-labelledby="use-heading">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Before you start</p>
+        <h2 id="use-heading">Gather four things first</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card card-rule">
+          <h3>1. A recent pay stub</h3>
+          <p>Budgets built on salary figures fail quietly. Budgets built on take-home pay — what actually arrives each month — hold up. If income varies, use a conservative recent month.</p>
+        </div>
+        <div class="card card-rule">
+          <h3>2. Last month's statements</h3>
+          <p>Fixed costs are easy to list from memory. Variable costs are not. One pass through last month's bank and card statements turns guesses into numbers — groceries, fuel, subscriptions, the small stuff that adds up.</p>
+        </div>
+        <div class="card card-rule">
+          <h3>3. Every debt, with its minimum</h3>
+          <p>Minimum payments on cards and loans belong in Needs — they're obligations. Anything you pay above the minimum belongs in Savings &amp; debt payoff, because that's the part that's actually moving you forward.</p>
+        </div>
+        <div class="card card-rule">
+          <h3>4. Ten honest minutes</h3>
+          <p>The first pass doesn't need to be perfect; it needs to be honest. Fill in what you know, estimate the rest, and let the percentages show you where the conversation is. You can refine it next month.</p>
+        </div>
+      </div>
+      <p class="fine" style="margin-top:1.5rem">Free to use — and free for advisors to share with clients. Not for resale or redistribution. This worksheet is an educational tool, not financial advice.</p>
+      <div class="cta-row" style="margin-top:2rem"><a class="btn btn-outline" href="templates-scripts.html">&larr; All tools &amp; templates</a></div>
+    </div>
+  </section>
+
+  <div class="band band-pine">
+    <div class="wrap">
+      <p class="eyebrow">A small sample</p>
+      <h2>These tools are a small sample of what I build for practices.</h2>
+      <p class="lead">If your operations could use this kind of thinking applied systematically — to your follow-up, your onboarding, your client service, your team — I'd love to talk.</p>
+      <div class="cta-row">
+        <a class="btn btn-light" href="../contact.html">Request an introductory call</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="wordmark">AJ Ghosh</p>
+        <p class="footer-tag">Practice operations consulting for financial professionals.</p>
+        <p class="footer-contact"><a href="mailto:aj@ajghosh.com">aj@ajghosh.com</a></p>
+      </div>
+      <div>
+        <p class="footer-heading">Site</p>
+        <ul class="footer-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../services.html">Services</a></li>
+          <li><a href="../how-it-works.html">How It Works</a></li>
+          <li><a href="../resources.html">Resources</a></li>
+          <li><a href="../blog.html">Blog</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-heading">Services</p>
+        <ul class="footer-nav">
+          <li><a href="../services.html#practice-operations-setup">Practice Operations Setup</a></li>
+          <li><a href="../services.html#monthly-operations-support">Monthly Operations Support</a></li>
+          <li><a href="../how-it-works.html">How It Works</a></li>
+          <li><a href="../contact.html">Book a Free Assessment</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-disclosure">
+      <p class="footer-heading">Disclosure</p>
+      <p>AJ Ghosh is a licensed insurance agent in the state of California (License #0F79124). The consulting services described on this website — including the Practice Operations Setup and Monthly Operations Support — provide operational and administrative support to financial professionals. They do not constitute investment advice, legal advice, or tax advice, and nothing on this site should be construed as a recommendation regarding any securities or insurance product. Insurance products and services, where offered, are offered separately from consulting engagements.</p>
+    </div>
+    <div class="footer-legal">© 2026 AJ Ghosh Consulting. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var PRESETS = {
+    income: ['Take-home pay', 'Other income (side work, rental, benefits)'],
+    needs: ['Rent or mortgage', 'Utilities (electric, water, gas, trash)', 'Groceries & household essentials',
+            'Car payment', 'Gas & transportation', 'Insurance premiums', 'Phone & internet',
+            'Minimum card & loan payments', 'Childcare', 'Medical & prescriptions'],
+    wants: ['Dining out & takeout', 'Streaming & subscriptions', 'Entertainment & events',
+            'Gym & memberships', 'Shopping & clothing', 'Travel & vacations', 'Hobbies', 'Personal care'],
+    save: ['Emergency fund', 'Retirement (401(k), IRA)', 'Other investing',
+           'Extra debt payments (above minimums)', 'Other savings goals']
+  };
+  var TARGETS = { needs: 50, wants: 30, save: 20 };
+  var fmt = function (n) {
+    return '$' + Math.round(n).toLocaleString('en-US');
+  };
+  function makeRow(group, label) {
+    var row = document.createElement('div');
+    row.className = 'bw-row';
+    var name = document.createElement('input');
+    name.type = 'text'; name.value = label || ''; name.placeholder = 'Description';
+    name.setAttribute('aria-label', 'Description');
+    var amt = document.createElement('input');
+    amt.type = 'number'; amt.min = '0'; amt.step = 'any'; amt.placeholder = '0';
+    amt.setAttribute('aria-label', 'Monthly amount');
+    var rm = document.createElement('button');
+    rm.type = 'button'; rm.className = 'bw-remove'; rm.textContent = '×';
+    rm.setAttribute('aria-label', 'Remove line');
+    rm.addEventListener('click', function () { row.remove(); recalc(); });
+    row.appendChild(name); row.appendChild(amt); row.appendChild(rm);
+    document.getElementById('rows-' + group).appendChild(row);
+    return amt;
+  }
+  function groupTotal(group) {
+    var sum = 0;
+    document.querySelectorAll('#rows-' + group + ' input[type="number"]').forEach(function (i) {
+      var v = parseFloat(i.value);
+      if (!isNaN(v) && v > 0) { sum += v; }
+    });
+    return sum;
+  }
+  function recalc() {
+    var income = groupTotal('income');
+    document.getElementById('total-income').textContent = fmt(income);
+    var spent = 0;
+    ['needs', 'wants', 'save'].forEach(function (g) {
+      var t = groupTotal(g);
+      spent += t;
+      document.getElementById('total-' + g).textContent = fmt(t);
+      document.getElementById('fig-' + g).textContent = fmt(t);
+      var pct = income > 0 ? (t / income) * 100 : 0;
+      document.getElementById('pct-' + g).textContent = (Math.round(pct * 10) / 10) + '%';
+      document.getElementById('tgt-' + g).textContent = fmt(income * TARGETS[g] / 100);
+      var bar = document.getElementById('bar-' + g);
+      bar.style.width = Math.min(pct, 100) + '%';
+      bar.classList.toggle('over', (g === 'needs' || g === 'wants') && pct > TARGETS[g]);
+      bar.classList.toggle('under', g === 'save' && pct > 0 && pct < TARGETS[g]);
+    });
+    var rem = income - spent;
+    var remEl = document.getElementById('fig-remaining');
+    remEl.textContent = (rem < 0 ? '−' : '') + fmt(Math.abs(rem));
+    remEl.classList.toggle('neg', rem < 0);
+  }
+  Object.keys(PRESETS).forEach(function (g) {
+    PRESETS[g].forEach(function (label) { makeRow(g, label); });
+  });
+  document.querySelectorAll('[data-add]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var amt = makeRow(btn.getAttribute('data-add'), '');
+      amt.focus();
+      recalc();
+    });
+  });
+  document.querySelector('.bw').addEventListener('input', recalc);
+  document.getElementById('bw-print').addEventListener('click', function () { window.print(); });
+  document.getElementById('bw-reset').addEventListener('click', function () {
+    document.querySelectorAll('.bw input[type="number"]').forEach(function (i) { i.value = ''; });
+    recalc();
+  });
+  recalc();
+})();
+</script>
+
+</body>
+</html>
