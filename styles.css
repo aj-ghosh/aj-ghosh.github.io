@@ -449,3 +449,6 @@ a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-under
   .main-nav a[aria-current="page"] { border-bottom: none; color: var(--gold-dark); }
   .row-item, .steps li { grid-template-columns: 1fr; gap: 0.75rem; }
 }
+
+/* Brand logo mark (added Nov 2026) */
+.brand-mark { height: 30px; width: auto; vertical-align: middle; margin-right: 10px; }
